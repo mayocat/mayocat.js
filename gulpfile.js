@@ -1,9 +1,21 @@
-var gulp = require('gulp');
+/*
+ * Requirements
+ */
 
+var gulp = require('gulp'),
+    argv = require('yargs').argv;
+
+// Gulp plugins
 var concat = require('gulp-concat'),
     clean = require('gulp-clean'),
     rename = require('gulp-rename'),
-    uglify = require('gulp-uglify');
+    uglify = require('gulp-uglify'),
+    bump = require('gulp-bump'),
+    git = require('gulp-git');
+
+/*
+ * Paths
+ */
 
 var paths = {
 
@@ -16,9 +28,18 @@ var paths = {
     header: 'src/header.js',
     src: 'src/mayocat.js',
     tmp: 'dist/.tmp',
-    dest: 'dist'
+    dest: 'dist',
+
+    release: [
+        'bower.json',
+        'package.json'
+    ],
 
 };
+
+/*
+ * Build tasks
+ */
 
 gulp.task('minify-deps', function() {
     return gulp.src(paths.deps)
@@ -60,3 +81,31 @@ gulp.task('clean', ['minify-deps', 'minify-src', 'concat-js', 'concat-js'], func
 });
 
 gulp.task('default', ['minify-deps', 'minify-src', 'concat-js', 'concat-min-js', 'clean']);
+
+/*
+ * Release tasks
+ */
+
+gulp.task('bump', function() {
+    return gulp.src(paths.release)
+        .pipe(bump({version: argv.ver}))
+        .pipe(gulp.dest('./'));
+});
+
+gulp.task('commit', ['bump'], function() {
+    return gulp.src(paths.release)
+        .pipe(git.commit('Release v' + argv.ver));
+});
+
+gulp.task('tag', ['bump', 'commit'], function() {
+    var version = 'v' + argv.ver;
+    return git.tag(version, 'Release ' + version);
+});
+
+gulp.task('push', ['bump', 'commit', 'tag'], function() {
+    return git.push('origin', 'master', {
+        args: '--tags'
+    }).end();
+});
+
+gulp.task('release', ['default', 'bump', 'commit', 'tag', 'push']);
