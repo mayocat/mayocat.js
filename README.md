@@ -1,10 +1,10 @@
 # Mayocat.js
 
-_Mayocat.js_ is a library providing various tools for your Mayocat themes.
+_Mayocat.js_ is an optional script that can help building Mayocat themes.
 
 ## Installation
 
-To use _Mayocat.js_ on your theme, install it with [Bower](http://bower.io/):
+To use _Mayocat.js_ on your theme you can install it with [Bower](http://bower.io/):
 
 ```
 bower install mayocat.js
@@ -15,6 +15,8 @@ And add the minified file to your HTML:
 ```html
 <script src="/bower_components/mayocat.js/dist/mayocat.min.js"></script>
 ```
+
+Or you can do install it manually, downloading the file and putting it somewhere in your theme folder.
 
 ## Contributing
 
