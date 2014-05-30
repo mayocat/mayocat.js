@@ -1,7 +1,7 @@
 {
   "name": "mayocat.js",
   "main": "dist/mayocat.js",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/mayocat/mayocat.js",
   "authors": [
     "Mayocat Development Team"
