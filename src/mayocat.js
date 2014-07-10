@@ -10,7 +10,7 @@ var Mayocat = (function (Mayocat) {
         if (typeof currentLocale !== 'undefined') {
             messageFormat = new MessageFormat(currentLocale);
 
-            $.getJSON("/api/localization/theme/" + currentLocale, function (json)
+            $.getJSON("/api/localization/theme/" + currentLocale + "?ajax", function (json)
             {
                 messageTemplates = json;
             });
@@ -58,7 +58,7 @@ var Mayocat = (function (Mayocat) {
             var template = Handlebars.compile($("#cart-table-template").html());
 
             var updateCart = function () {
-                $.getJSON("/cart", function (result) {
+                $.getJSON("/cart?ajax", function (result) {
                     var cart = result.cart,
                         updatedTable = template(cart);
 
@@ -97,7 +97,7 @@ var Mayocat = (function (Mayocat) {
 
                         data["remove_" + index] = 1;
 
-                        $.post("/cart/update", data, function () {
+                        $.post("/cart/update?ajax", data, function () {
                             item.parents(".item").fadeOut(500, function () {
                                 $(this).remove();
 
@@ -108,7 +108,7 @@ var Mayocat = (function (Mayocat) {
 
                     data["quantity_" + index] = isAdd ? quantity + 1 : quantity - 1;
 
-                    $.post("/cart/update", data, function () {
+                    $.post("/cart/update?ajax", data, function () {
                         updateCart();
                     });
                 });
@@ -116,7 +116,7 @@ var Mayocat = (function (Mayocat) {
                 // AJAX change shipping option
                 $("[name='shipping_option']").change(function () {
                     isUpdating = true;
-                    $.post("/cart/update", {
+                    $.post("/cart/update?ajax", {
                         "shipping_option": $("[name='shipping_option']").val()
                     }, function () {
                         updateCart();
